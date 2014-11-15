@@ -18,17 +18,28 @@
 # Author: $author$
 #   Date: 11/5/2014
 #
-# Common Gcc Makefile for Elevation evls Executable
+# Common Gcc Makefile for evelation evls Executable
 ########################################################################
 
+########################################################################
+# ev
 evls_CPP_SOURCES += \
 ${EV_SRC}/ev/fs/path/matcher.cpp \
 ${EV_SRC}/ev/fs/path/match/reader.cpp \
 ${EV_SRC}/ev/fs/path/match/read/events.cpp \
 ${EV_SRC}/ev/fs/path/separator.cpp \
 ${EV_SRC}/ev/fs/path/parts.cpp \
-${EV_SRC}/ev/os/unix/fs/directory/path.cpp \
-${EV_SRC}/ev/os/unix/fs/directory/entry.cpp \
 ${EV_SRC}/ev/app/console/ls/main.cpp \
+
+########################################################################
+# talas
+evls_CPP_SOURCES += \
+${TALAS_SRC}/talas/crypto/hash/openssl/sha256.cpp \
+${TALAS_SRC}/talas/crypto/hash/mac.cpp \
+${TALAS_SRC}/talas/crypto/hash/base.cpp \
+
+########################################################################
+# xos
+evls_CPP_SOURCES += \
 ${XOS_SRC}/xos/nadir/xos/base/main_main.cpp \
 

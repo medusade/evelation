@@ -18,7 +18,7 @@
 # Author: $author$
 #   Date: 11/5/2014
 #
-# Common Gcc Makefile for Elevation
+# Common Gcc Makefile for evelation
 ########################################################################
 EV_PKG = ${PKG}
 EV_SRC = ${EV_PKG}/src
@@ -32,17 +32,25 @@ XOS_LIB = ${XOS_BLD}/lib
 XOS_BIN = ${XOS_BLD}/bin
 
 ########################################################################
+# talas
+TALAS_PKG = ${EV_PKG}/../talas
+TALAS_SRC = ${TALAS_PKG}/src
+TALAS_BLD = ${TALAS_PKG}/${BLD}/${BUILD_TYPE}
+TALAS_LIB = ${TALAS_BLD}/lib
+TALAS_BIN = ${TALAS_BLD}/bin
+
+########################################################################
 # ev
 ev_USRDEFINES += \
 
 ev_USRINCLUDES += \
 -I${EV_SRC} \
+-I${TALAS_SRC} \
 -I${XOS_SRC}/xos/nadir \
 
 ev_USRLIBDIRS += \
+-L${TALAS_LIB} \
 -L${XOS_LIB} \
 
 ev_USRLIBS += \
 -lxosnadir \
--lpthread \
--ldl \

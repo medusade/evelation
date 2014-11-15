@@ -13,51 +13,29 @@
 # or otherwise) arising in any way out of the use of this software, 
 # even if advised of the possibility of such damage.
 #
-#   File: ev.pri
+#   File: Makefile
 #
 # Author: $author$
-#   Date: 10/30/2014
-########################################################################
-EV_PKG = ../../../../..
-EV_BLD = ../..
-EV_PRJ = $${EV_PKG}
-EV_BIN = $${EV_BLD}/bin
-EV_LIB = $${EV_BLD}/lib
-EV_SRC = $${EV_PKG}/src
-
-########################################################################
-TALAS_PKG = $${EV_PKG}/../talas
-TALAS_PRJ = $${TALAS_PKG}
-TALAS_SRC = $${TALAS_PKG}/src
-
-talas_INCLUDEPATH += \
-$${TALAS_SRC} \
-
-talas_DEFINES += \
-
-########################################################################
-XOS_PKG = $${EV_PKG}/../xos
-XOS_PRJ = $${XOS_PKG}
-XOS_SRC = $${XOS_PKG}/src
-
-xos_INCLUDEPATH += \
-$${XOS_SRC}/xos/nadir \
-
-xos_DEFINES += \
-
+#   Date: 11/13/2014
+#
+# Gcc Makefile for evelation evcp Executable
 ########################################################################
 
-ev_INCLUDEPATH += \
-$${EV_SRC} \
-$${talas_INCLUDEPATH} \
-$${xos_INCLUDEPATH} \
+########################################################################
+# ev
+evcp_CPP_SOURCES += \
+${EV_SRC}/ev/fs/path/separate/events.cpp \
+${EV_SRC}/ev/fs/path/separator.cpp \
+${EV_SRC}/ev/fs/path/parts.cpp \
+${EV_SRC}/ev/app/console/cp/main.cpp \
+${EV_SRC}/ev/console/main_main.cpp \
 
-ev_DEFINES += \
-$${talas_DEFINES} \
-$${xos_DEFINES} \
+########################################################################
+# talas
+evcp_CPP_SOURCES += \
+${TALAS_SRC}/talas/crypto/hash/openssl/sha256.cpp \
+${TALAS_SRC}/talas/crypto/hash/openssl/sha1.cpp \
+${TALAS_SRC}/talas/crypto/hash/openssl/md5.cpp \
+${TALAS_SRC}/talas/crypto/hash/mac.cpp \
+${TALAS_SRC}/talas/crypto/hash/base.cpp \
 
-ev_HEADERS += \
-
-ev_SOURCES += \
-
-ev_LIBS += \

@@ -18,5 +18,5 @@
 # Author: $author$
 #   Date: 11/5/2014
 #
-# MacOSX Gcc Makefile for Elevation
+# MacOSX Gcc Makefile for evelation
 ########################################################################
