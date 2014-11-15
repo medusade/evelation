@@ -18,7 +18,7 @@
 /// Author: $author$
 ///   Date: 10/31/2014
 ///////////////////////////////////////////////////////////////////////
-#include "path.hpp"
+#include "ev/os/unix/fs/directory/path.hpp"
 
 namespace ev {
 namespace os {
@@ -26,18 +26,12 @@ namespace unix {
 namespace fs {
 namespace directory {
 
-
 ///////////////////////////////////////////////////////////////////////
 ///  Class: patht
 ///////////////////////////////////////////////////////////////////////
-
 
 } // namespace directory 
 } // namespace fs 
 } // namespace unix 
 } // namespace os 
 } // namespace ev 
-
-
-        
-

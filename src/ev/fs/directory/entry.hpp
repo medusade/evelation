@@ -60,26 +60,6 @@ public:
 
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
-    virtual const char_t* set_path(const char_t* chars, size_t length) {
-        path_.assign(chars, length);
-        on_set_path(path_.c_str(), path_.length());
-        return path_.c_str();
-    }
-    virtual const char_t* set_path(const char_t* chars) {
-        path_.assign(chars);
-        on_set_path(path_.c_str(), path_.length());
-        return path_.c_str();
-    }
-    virtual const char_t* path(size_t& length) const {
-        length = path_.length();
-        return path_.c_str();
-    }
-    virtual const char_t* path() const {
-        return path_.c_str();
-    }
-
-    ///////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////
     virtual const char_t* set_directory(const char_t* chars, size_t length) {
         directory_.assign(chars, length);
         on_set_directory(directory_.c_str(), directory_.length());
@@ -145,12 +125,12 @@ protected:
     }
     virtual void on_set_name(const char_t* chars, size_t length) {
         const char_t* pchars; size_t plength;
-        if ((pchars = path(plength)) && (0 < (plength))) {
+        if ((pchars = this->path(plength)) && (0 < (plength))) {
             if ((pchars[plength-1]) != (separator())) {
-                path_.append(&separator(),1);
+                this->path_.append(&separator(),1);
             }
         }
-        path_.append(chars, length);
+        this->path_.append(chars, length);
         is_current_ = !(current_.compare(chars, length));
         is_parent_ = !(parent_.compare(chars, length));
         is_circular_ = (is_current_ || is_parent_);
@@ -161,7 +141,7 @@ protected:
 protected:
     const char_t separator_;
     const string_t parent_, current_;
-    string_t path_, directory_;
+    string_t directory_;
     bool_t is_circular_, is_current_, is_parent_;
 };
 typedef entryt<> entry;

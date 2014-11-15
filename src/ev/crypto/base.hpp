@@ -13,29 +13,31 @@
 /// or otherwise) arising in any way out of the use of this software, 
 /// even if advised of the possibility of such damage.
 ///
-///   File: main_opt.hpp
+///   File: base.hpp
 ///
 /// Author: $author$
-///   Date: 10/31/2014
+///   Date: 11/11/2014
 ///////////////////////////////////////////////////////////////////////
-#ifndef _EV_APP_CONSOLE_MAIN_OPT_HPP
-#define _EV_APP_CONSOLE_MAIN_OPT_HPP
+#ifndef _EV_CRYPTO_BASE_HPP
+#define _EV_CRYPTO_BASE_HPP
 
-#include "ev/console/main.hpp"
+#include "talas/crypto/hash/openssl/sha256.hpp"
+#include "talas/crypto/hash/openssl/sha1.hpp"
+#include "talas/crypto/hash/openssl/md5.hpp"
 
 namespace ev {
-namespace app {
-namespace console {
+namespace crypto {
 
-typedef ev::console::main_opt_argument_t main_opt_argument_t;
-enum {
-    MAIN_OPT_ARGUMENT_NONE     = ev::console::MAIN_OPT_ARGUMENT_NONE,
-    MAIN_OPT_ARGUMENT_REQUIRED = ev::console::MAIN_OPT_ARGUMENT_REQUIRED,
-    MAIN_OPT_ARGUMENT_OPTIONAL = ev::console::MAIN_OPT_ARGUMENT_OPTIONAL
-};
+namespace hash {
 
-} // namespace console
-} // namespace app 
-} // namespace ev 
+typedef talas::crypto::hash::base base;
+typedef talas::crypto::hash::openssl::md5 md5;
+typedef talas::crypto::hash::openssl::sha1 sha1;
+typedef talas::crypto::hash::openssl::sha256 sha256;
 
-#endif // _EV_APP_CONSOLE_MAIN_OPT_HPP 
+} // namespace hash
+
+} // namespace crypto
+} // namespace ev
+
+#endif // _EV_CRYPTO_BASE_HPP 

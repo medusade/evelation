@@ -16,26 +16,30 @@
 ///   File: main_opt.hpp
 ///
 /// Author: $author$
-///   Date: 10/31/2014
+///   Date: 11/8/2014
 ///////////////////////////////////////////////////////////////////////
-#ifndef _EV_APP_CONSOLE_MAIN_OPT_HPP
-#define _EV_APP_CONSOLE_MAIN_OPT_HPP
+#ifndef _EV_CONSOLE_MAIN_OPT_HPP
+#define _EV_CONSOLE_MAIN_OPT_HPP
 
-#include "ev/console/main.hpp"
+#include "ev/base/base.hpp"
+#include "xos/base/getopt/main.hpp"
+#include "xos/base/getopt/main_opt.hpp"
+
+#define EV_MAIN_LOGGING_OPTVAL_C XOS_MAIN_LOGGING_OPTVAL_C
+#define EV_MAIN_LOGGING_OPTARG XOS_MAIN_LOGGING_OPTARG
+#define EV_MAIN_LOGGING_OPTUSE XOS_MAIN_LOGGING_OPTUSE
 
 namespace ev {
-namespace app {
 namespace console {
 
-typedef ev::console::main_opt_argument_t main_opt_argument_t;
+typedef int main_opt_argument_t;
 enum {
-    MAIN_OPT_ARGUMENT_NONE     = ev::console::MAIN_OPT_ARGUMENT_NONE,
-    MAIN_OPT_ARGUMENT_REQUIRED = ev::console::MAIN_OPT_ARGUMENT_REQUIRED,
-    MAIN_OPT_ARGUMENT_OPTIONAL = ev::console::MAIN_OPT_ARGUMENT_OPTIONAL
+    MAIN_OPT_ARGUMENT_NONE     = XOS_MAIN_OPT_ARGUMENT_NONE,
+    MAIN_OPT_ARGUMENT_REQUIRED = XOS_MAIN_OPT_ARGUMENT_REQUIRED,
+    MAIN_OPT_ARGUMENT_OPTIONAL = XOS_MAIN_OPT_ARGUMENT_OPTIONAL
 };
 
 } // namespace console
-} // namespace app 
 } // namespace ev 
 
-#endif // _EV_APP_CONSOLE_MAIN_OPT_HPP 
+#endif // _EV_CONSOLE_MAIN_OPT_HPP 

@@ -26,8 +26,16 @@
 #include "xos/base/attacher.hpp"
 #include "xos/base/opened.hpp"
 #include "xos/base/opener.hpp"
+#include "xos/base/types.hpp"
+#include "xos/io/write/file.hpp"
+#include "xos/io/file/writer.hpp"
+#include "xos/io/read/file.hpp"
+#include "xos/io/file/reader.hpp"
+#include "xos/io/file/opened.hpp"
+#include "xos/io/file/attached.hpp"
 #include "xos/io/logger.hpp"
 
+#define EV_LOG_ANY XOS_LOG_ANY
 #define EV_LOG_FATAL XOS_LOG_FATAL
 #define EV_LOG_ERROR XOS_LOG_ERROR
 #define EV_LOG_WARN XOS_LOG_WARN
@@ -35,12 +43,29 @@
 #define EV_LOG_DEBUG XOS_LOG_DEBUG
 #define EV_LOG_TRACE XOS_LOG_TRACE
 
+#define EV_LOG_ANYF XOS_LOG_ANYF
 #define EV_LOG_FATALF XOS_LOG_FATALF
 #define EV_LOG_ERRORF XOS_LOG_ERRORF
 #define EV_LOG_WARNF XOS_LOG_WARNF
 #define EV_LOG_INFOF XOS_LOG_INFOF
 #define EV_LOG_DEBUGF XOS_LOG_DEBUGF
 #define EV_LOG_TRACEF XOS_LOG_TRACEF
+
+#define EV_LOG_MESSAGE_ANY XOS_LOG_MESSAGE_ANY
+#define EV_LOG_MESSAGE_FATAL XOS_LOG_MESSAGE_FATAL
+#define EV_LOG_MESSAGE_ERROR XOS_LOG_MESSAGE_ERROR
+#define EV_LOG_MESSAGE_WARN XOS_LOG_MESSAGE_WARN
+#define EV_LOG_MESSAGE_INFO XOS_LOG_MESSAGE_INFO
+#define EV_LOG_MESSAGE_DEBUG XOS_LOG_MESSAGE_DEBUG
+#define EV_LOG_MESSAGE_TRACE XOS_LOG_MESSAGE_TRACE
+
+#define EV_LOG_MESSAGE_ANYF XOS_LOG_MESSAGE_ANYF
+#define EV_LOG_MESSAGE_FATALF XOS_LOG_MESSAGE_FATALF
+#define EV_LOG_MESSAGE_ERRORF XOS_LOG_MESSAGE_ERRORF
+#define EV_LOG_MESSAGE_WARNF XOS_LOG_MESSAGE_WARNF
+#define EV_LOG_MESSAGE_INFOF XOS_LOG_MESSAGE_INFOF
+#define EV_LOG_MESSAGE_DEBUGF XOS_LOG_MESSAGE_DEBUGF
+#define EV_LOG_MESSAGE_TRACEF XOS_LOG_MESSAGE_TRACEF
 
 namespace ev {
 
@@ -123,6 +148,21 @@ using stringt = typename xos::base::stringt
 typedef xos::base::string string_t;
 typedef xos::base::tstring tstring_t;
 typedef xos::base::wstring wstring_t;
+
+///////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////
+typedef xos::base::chars_t chars_t;
+typedef xos::base::tchars_t tchars_t;
+typedef xos::base::wchars_t wchars_t;
+
+namespace io {
+namespace read {
+typedef xos::io::read::file file;
+} // namespace read
+namespace write {
+typedef xos::io::write::file file;
+} // namespace write
+} // namespace io
 
 } // namespace ev
 

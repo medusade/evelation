@@ -105,6 +105,12 @@ public:
 
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
+    virtual ev::fs::entry_type make_directory(const char_t* path) const {
+        return ev::fs::entry_type_none;
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
     virtual bool exists_is_type
     (const char_t* path, ev::fs::entry_type is_type) {
         ev::fs::entry_type type = exists(path);
@@ -231,12 +237,22 @@ public:
 
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
+    virtual const char_t* set_path(const char_t* chars, size_t length) {
+        path_.assign(chars, length);
+        on_set_path(path_.c_str(), path_.length());
+        return path_.c_str();
+    }
+    virtual const char_t* set_path(const char_t* chars) {
+        path_.assign(chars);
+        on_set_path(path_.c_str(), path_.length());
+        return path_.c_str();
+    }
     virtual const char_t* path(size_t& length) const {
-        length = 0;
-        return 0;
+        length = path_.length();
+        return path_.c_str();
     }
     virtual const char_t* path() const {
-        return 0;
+        return path_.c_str();
     }
 
     ///////////////////////////////////////////////////////////////////////
@@ -322,6 +338,8 @@ public:
 protected:
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
+    virtual void on_set_path(const char_t* chars, size_t length) {
+    }
     virtual void on_set_name(const char_t* chars, size_t length) {
     }
     virtual void on_set_size(entry_size_t size) {
@@ -334,7 +352,7 @@ protected:
 protected:
     entry_type type_;
     entry_size_t size_;
-    string_t name_;
+    string_t path_, name_;
     time_when times_;
     time time_modified_, time_accessed_, time_changed_, time_created_;
 };

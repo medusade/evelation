@@ -13,29 +13,24 @@
 /// or otherwise) arising in any way out of the use of this software, 
 /// even if advised of the possibility of such damage.
 ///
-///   File: main_opt.hpp
+///   File: main.cpp
 ///
 /// Author: $author$
-///   Date: 10/31/2014
+///   Date: 11/8/2014
 ///////////////////////////////////////////////////////////////////////
-#ifndef _EV_APP_CONSOLE_MAIN_OPT_HPP
-#define _EV_APP_CONSOLE_MAIN_OPT_HPP
-
-#include "ev/console/main.hpp"
+#include "ev/app/console/cp/main.hpp"
 
 namespace ev {
 namespace app {
 namespace console {
+namespace cp {
 
-typedef ev::console::main_opt_argument_t main_opt_argument_t;
-enum {
-    MAIN_OPT_ARGUMENT_NONE     = ev::console::MAIN_OPT_ARGUMENT_NONE,
-    MAIN_OPT_ARGUMENT_REQUIRED = ev::console::MAIN_OPT_ARGUMENT_REQUIRED,
-    MAIN_OPT_ARGUMENT_OPTIONAL = ev::console::MAIN_OPT_ARGUMENT_OPTIONAL
-};
+///////////////////////////////////////////////////////////////////////
+///  Class: main
+///////////////////////////////////////////////////////////////////////
+static main the_main;
 
-} // namespace console
+} // namespace cp 
+} // namespace console 
 } // namespace app 
 } // namespace ev 
-
-#endif // _EV_APP_CONSOLE_MAIN_OPT_HPP 

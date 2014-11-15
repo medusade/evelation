@@ -26,6 +26,10 @@
 #include <sys/stat.h>
 #include <utime.h>
 
+#define S_IRWX (S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH)
+#define S_IRW (S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH)
+#define S_IR (S_IRUSR | S_IRGRP | S_IROTH)
+
 namespace ev {
 namespace os {
 namespace unix {
@@ -87,11 +91,27 @@ public:
 
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
+    virtual ev::fs::entry_type make_directory(const char_t* path) const {
+        if ((path)) {
+            int err = 0;
+            mode_t mode = S_IRWX;
+            if (!(err = mkdir(path, mode))) {
+                return ev::fs::entry_type_directory;
+            } else {
+                EV_LOG_ERROR("failed " << errno << " on mkdir(\"" << path << "\", " << mode << "\"");
+            }
+        }
+        return ev::fs::entry_type_none;
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
     virtual ev::fs::entry_type exists(const char_t* path) {
         int err = 0;
         if (!(err = stat(path, &st_))) {
             if (!(err = lstat(path, &lst_))) {
                 if ((get_found_attributes())) {
+                    this->set_path(path);
                     return this->type();
                 }
             } else {
@@ -137,6 +157,7 @@ public:
 
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
+    using Extends::set_times_to_set;
     virtual ev::fs::time_when set_times_to_set
     (const ev::fs::time& time_modified, const ev::fs::time& time_accessed,
      const ev::fs::time& time_changed, const ev::fs::time& time_created,
@@ -164,8 +185,8 @@ public:
         size_t length;
 
         if ((chars = this->path(length)) && (0 < length)) {
-            const struct stat& st = st_;
-            struct utimbuf ut = ut_;
+            const struct stat& st = to_st_;
+            struct utimbuf& ut = ut_;
             int err;
 
             ut.actime = st.st_atime;
@@ -184,7 +205,7 @@ public:
     ///////////////////////////////////////////////////////////////////////
     virtual ev::fs::time_when get_found_times() {
         const struct stat& st = st_;
-        bool is_local = 0;
+        bool is_local = false;
         ev::fs::time_when when = ev::fs::when_none;
         struct tm tm;
 
