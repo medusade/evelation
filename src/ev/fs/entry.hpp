@@ -237,6 +237,16 @@ public:
 
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
+    virtual int newer_or_older_than(const entryt& e) const {
+        int unequal = 0;
+        if ((time_modified_) && (e.time_modified_)) {
+            unequal = time_modified_.compare(e.time_modified_);
+        }
+        return unequal;
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
     virtual const char_t* set_path(const char_t* chars, size_t length) {
         path_.assign(chars, length);
         on_set_path(path_.c_str(), path_.length());

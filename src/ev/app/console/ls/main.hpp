@@ -61,8 +61,8 @@ namespace ls {
 
 typedef fs::path::matchers main_matchers;
 typedef fs::path::match::read::events main_match_events;
-typedef xos::base::getopt::main_implement main_implement;
-typedef xos::base::getopt::main main_extend;
+typedef ev::console::main_implement main_implement;
+typedef ev::console::main main_extend;
 ///////////////////////////////////////////////////////////////////////
 ///  Class: main
 ///////////////////////////////////////////////////////////////////////
@@ -77,7 +77,8 @@ public:
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
     main()
-    : between_(EV_APP_CONSOLE_LS_BETWEEN),
+    : compare_to_(compare_to_file),
+      between_(EV_APP_CONSOLE_LS_BETWEEN),
       match_(EV_APP_CONSOLE_LS_MATCH_PATTERNS),
       skip_(EV_APP_CONSOLE_LS_SKIP_PATTERNS),
       match_directory_(EV_APP_CONSOLE_LS_MATCH_DIRECTORY_PATTERNS),
@@ -94,9 +95,17 @@ public:
 protected:
     typedef crypto::hash::base hash_t;
     typedef crypto::hash::sha256 sha256_t;
+    typedef crypto::hash::sha1 sha1_t;
+    typedef crypto::hash::md5 md5_t;
     typedef fs::path::parts path_t;
     typedef fs::entry entry_t;
     typedef io::read::file source_file_t;
+    enum compare_to_t {
+        compare_to_file,
+        compare_to_sha256,
+        compare_to_sha1,
+        compare_to_md5
+    };
 
 protected:
     ///////////////////////////////////////////////////////////////////////
@@ -177,17 +186,34 @@ protected:
     (const fs::directory::entry& e, const string_t& target) {
         os::os::fs::entry t;
         if ((t.exists_is_type(target.chars(), e.type()))) {
-            if (!(all_files_on_)) {
-                if ((missing_files_on_)) {
-                    return false;
-                } else {
+            if ((missing_files_on_)) {
+                return false;
+            } else {
+                if (!(all_files_on_)) {
+                    int newer_or_older_than = e.newer_or_older_than(t);
+                    bool is_newer_than = (0 < newer_or_older_than);
+                    bool is_older_than = (0 > newer_or_older_than);
+
+                    if ((is_newer_than)) {
+                        EV_LOG_MESSAGE_INFO("file \"" << e.path() << "\" newer than \"" << t.path() << "\"");
+                    } else {
+                        if ((is_older_than)) {
+                            EV_LOG_MESSAGE_INFO("file \"" << e.path() << "\" older than \"" << t.path() << "\"");
+                        } else {
+                        }
+                    }
+
                     if ((older_files_on_)) {
-                        if ((e.is_newer_than(t))) {
-                            return false;
+                        if ((is_newer_than)) {
+                            if (!(compare_all_files_on_)) {
+                                return false;
+                            }
                         }
                     } else {
-                        if ((e.is_older_than_or_equal(t))) {
-                            return false;
+                        if (!(is_newer_than)) {
+                            if (!(compare_all_files_on_)) {
+                                return false;
+                            }
                         }
                     }
                 }
@@ -205,45 +231,20 @@ protected:
     (const fs::directory::entry& e,
      const os::os::fs::entry& target, bool matched_unequal = true) {
         if ((compare_files_on_)) {
+            int unequal = 1;
             hash_t* hash = 0;
 
             if ((hash = this->file_hash())) {
-                ssize_t s_size, t_size;
-
-                if (0 < (s_size = this->hash_file(e, *hash, source_block_))) {
-                    string_t x;
-
-                    x.assignx(source_block_, s_size);
-                    EV_LOG_MESSAGE_INFO("source hash = " << x << "");
-
-                    if (0 < (t_size = this->hash_file(target, *hash, target_block_))) {
-                        x.assignx(target_block_, s_size);
-                        EV_LOG_MESSAGE_INFO("terget hash = " << x << "");
-
-                        if ((s_size) == (t_size)) {
-                            int unequal;
-                            if (!(unequal = memcmp(source_block_, target_block_, s_size))) {
-                                return !matched_unequal;
-                            } else {
-                                EV_LOG_MESSAGE_INFO("source hash " << ((0 < unequal)?(">"):("<")) << " target hash");
-                            }
-                        }
-                    }
+                if (!(unequal = compare_file_hashes(e, target, *hash))) {
+                    return !matched_unequal;
                 }
             } else {
-                int unequal;
                 if (!(unequal = compare_files(e, target))) {
                     return !matched_unequal;
                 }
             }
         }
         return matched_unequal;
-    }
-    ///////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////
-    virtual hash_t* file_hash() const {
-        //return (hash_t*)(&sha256_);
-        return 0;
     }
 
     ///////////////////////////////////////////////////////////////////////
@@ -412,37 +413,6 @@ protected:
     }
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
-    virtual ssize_t hash_file
-    (const entry_t& source, hash_t& target, char block[]) {
-        const char_t* chars = 0;
-        size_t length = 0;
-
-        if ((chars = source.path(length)) && (0 < length)) {
-            source_file_t source_file;
-
-            EV_LOG_MESSAGE_INFO("open source file \"" << chars << "\"...");
-            if ((source_file.open(chars, source_file.mode_read_binary()))) {
-                EV_LOG_MESSAGE_INFO("...opened source file \"" << chars << "\"");
-
-                if (0 < (length = hash_file(source_file, target, block))) {
-                }
-
-                EV_LOG_MESSAGE_INFO("close source file \"" << chars << "\"...");
-                if ((source_file.close())) {
-                    EV_LOG_MESSAGE_INFO("...closed source file \"" << chars << "\"");
-                    return length;
-                } else {
-                    EV_LOG_MESSAGE_INFO("...failed to close source file \"" << chars << "\"");
-                }
-            } else {
-                EV_LOG_MESSAGE_ERROR("...failed to open source file \"" << chars << "\"");
-            }
-        }
-        return 0;
-    }
-
-    ///////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////
     virtual int compare_files(source_file_t& source, source_file_t& target) {
         int unequal = 0;
         for (ssize_t s_amount = 0, t_amount = 0; 0 <= s_amount; ) {
@@ -474,6 +444,62 @@ protected:
 
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
+    virtual int compare_file_hashes
+    (const entry_t& source, const entry_t& target, hash_t& hash) {
+        int unequal = 1;
+        ssize_t s_size, t_size;
+
+        if (0 < (s_size = this->hash_file(source, hash, source_block_))) {
+            string_t x;
+
+            x.assignx(source_block_, s_size);
+            EV_LOG_MESSAGE_INFO("source hash = " << x << "");
+
+            if (0 < (t_size = this->hash_file(target, hash, target_block_))) {
+                x.assignx(target_block_, s_size);
+                EV_LOG_MESSAGE_INFO("terget hash = " << x << "");
+
+                if ((s_size) == (t_size)) {
+                    if ((unequal = memcmp(source_block_, target_block_, s_size))) {
+                        EV_LOG_MESSAGE_INFO("source hash " << ((0 < unequal)?(">"):("<")) << " target hash");
+                    }
+                }
+            }
+        }
+        return unequal;
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    virtual ssize_t hash_file
+    (const entry_t& source, hash_t& target, char block[]) {
+        const char_t* chars = 0;
+        size_t length = 0;
+
+        if ((chars = source.path(length)) && (0 < length)) {
+            source_file_t source_file;
+
+            EV_LOG_MESSAGE_INFO("open source file \"" << chars << "\"...");
+            if ((source_file.open(chars, source_file.mode_read_binary()))) {
+                EV_LOG_MESSAGE_INFO("...opened source file \"" << chars << "\"");
+
+                if (0 < (length = hash_file(source_file, target, block))) {
+                }
+
+                EV_LOG_MESSAGE_INFO("close source file \"" << chars << "\"...");
+                if ((source_file.close())) {
+                    EV_LOG_MESSAGE_INFO("...closed source file \"" << chars << "\"");
+                    return length;
+                } else {
+                    EV_LOG_MESSAGE_INFO("...failed to close source file \"" << chars << "\"");
+                }
+            } else {
+                EV_LOG_MESSAGE_ERROR("...failed to open source file \"" << chars << "\"");
+            }
+        }
+        return 0;
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
     virtual ssize_t hash_file
     (source_file_t& source, hash_t& target, char block[]) {
         if (0 <= (target.initialize())) {
@@ -497,6 +523,27 @@ protected:
         }
         return 0;
     }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    virtual hash_t* file_hash() const {
+        hash_t* hash = 0;
+        switch (compare_to_) {
+        case compare_to_sha256:
+            hash = (hash_t*)&sha256_;
+            break;
+        case compare_to_sha1:
+            hash = (hash_t*)&sha1_;
+            break;
+        case compare_to_md5:
+            hash = (hash_t*)&md5_;
+            break;
+        case compare_to_file:
+            break;
+        default:
+            break;
+        }
+        return hash;
+    }
 
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
@@ -506,6 +553,10 @@ protected:
     ///////////////////////////////////////////////////////////////////////
 protected:
     sha256_t sha256_;
+    sha1_t sha1_;
+    md5_t md5_;
+
+    compare_to_t compare_to_;
 
     main_matchers matchers_, skipers_;
     main_matchers directory_matchers_, directory_skipers_;
@@ -517,7 +568,7 @@ protected:
 
     bool_t name_on_, directory_on_, directory_only_on_;
     bool_t source_on_, target_on_, reverse_on_, recursive_on_, reflective_on_;
-    bool_t match_case_on_, compare_files_on_;
+    bool_t match_case_on_, compare_files_on_, compare_all_files_on_;
     bool_t existing_files_on_, missing_files_on_, older_files_on_, all_files_on_;
     bool_t exclude_directory_links_on_, exclude_file_links_on_;
     bool_t ln_on_;

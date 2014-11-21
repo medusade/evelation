@@ -21,6 +21,12 @@
 #ifndef _EV_APP_CONSOLE_LS_MAIN_OPT_CPP
 #define _EV_APP_CONSOLE_LS_MAIN_OPT_CPP
 
+#ifndef _EV_APP_CONSOLE_LS_MAIN_HPP
+#include "ev/app/console/ls/main_opt.hpp"
+class _EXPORT_CLASS main {
+protected:
+#endif // ndef _EV_APP_CONSOLE_LS_MAIN_HPP
+
 ///////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////
 virtual int on_before_directory_option
@@ -161,6 +167,27 @@ virtual int on_reflective_option
 }
 
 ///////////////////////////////////////////////////////////////////////
+virtual int on_skip_directory_file_option
+(int optval, const char* optarg,
+ const char* optname, int optind,
+ int argc, char**argv, char**env) {
+    int err = 0;
+    if ((optarg))
+        skip_directory_file_.assign(optarg);
+    return err;
+}
+///////////////////////////////////////////////////////////////////////
+virtual int on_skip_directory_option
+(int optval, const char* optarg,
+ const char* optname, int optind,
+ int argc, char**argv, char**env) {
+    int err = 0;
+    if ((optarg))
+        skip_directory_.assign(optarg);
+    return err;
+}
+
+///////////////////////////////////////////////////////////////////////
 virtual int on_match_file_option
 (int optval, const char* optarg,
  const char* optname, int optind,
@@ -221,12 +248,53 @@ virtual int on_ignore_case_option
     return err;
 }
 ///////////////////////////////////////////////////////////////////////
+virtual int on_compare_to_option
+(int optval, const char* optarg,
+ const char* optname, int optind,
+ int argc, char**argv, char**env) {
+    int err = 0;
+    if ((!(optarg[1]) && (EV_APP_CONSOLE_LS_MAIN_COMPARE_TO_OPTARG_MD5_C[0] == (optarg[0])))
+        || !(chars_t::compare(optarg, EV_APP_CONSOLE_LS_MAIN_COMPARE_TO_OPTARG_MD5_S))) {
+        compare_to_ = compare_to_md5;
+    } else {
+        if ((!(optarg[1]) && (EV_APP_CONSOLE_LS_MAIN_COMPARE_TO_OPTARG_SHA1_C[0] == (optarg[0])))
+            || !(chars_t::compare(optarg, EV_APP_CONSOLE_LS_MAIN_COMPARE_TO_OPTARG_SHA1_S))) {
+            compare_to_ = compare_to_sha1;
+        } else {
+            if ((!(optarg[1]) && (EV_APP_CONSOLE_LS_MAIN_COMPARE_TO_OPTARG_SHA256_C[0] == (optarg[0])))
+                || !(chars_t::compare(optarg, EV_APP_CONSOLE_LS_MAIN_COMPARE_TO_OPTARG_SHA256_S))) {
+                compare_to_ = compare_to_sha256;
+            } else {
+                if ((!(optarg[1]) && (EV_APP_CONSOLE_LS_MAIN_COMPARE_TO_OPTARG_FILE_C[0] == (optarg[0])))
+                    || !(chars_t::compare(optarg, EV_APP_CONSOLE_LS_MAIN_COMPARE_TO_OPTARG_FILE_S))) {
+                    compare_to_ = compare_to_file;
+                } else {
+                    err = on_invalid_option_arg
+                    (optval, optarg, optname, optind, argc, argv, env);
+                }
+            }
+        }
+    }
+    return err;
+}
+///////////////////////////////////////////////////////////////////////
+virtual int on_compare_all_files_option
+(int optval, const char* optarg,
+ const char* optname, int optind,
+ int argc, char**argv, char**env) {
+    int err = 0;
+    compare_files_on_ = true;
+    compare_all_files_on_ = true;
+    return err;
+}
+///////////////////////////////////////////////////////////////////////
 virtual int on_compare_files_option
 (int optval, const char* optarg,
  const char* optname, int optind,
  int argc, char**argv, char**env) {
     int err = 0;
     compare_files_on_ = true;
+    compare_all_files_on_ = false;
     return err;
 }
 ///////////////////////////////////////////////////////////////////////
@@ -273,24 +341,6 @@ virtual int on_exclude_links_option
     int err = 0;
     exclude_directory_links_on_ = true;
     exclude_file_links_on_ = true;
-    return err;
-}
-///////////////////////////////////////////////////////////////////////
-virtual int on_debug_levels_option
-(int optval, const char* optarg,
- const char* optname, int optind,
- int argc, char**argv, char**env) {
-    int err = on_logging_option
-    (EV_MAIN_LOGGING_OPTVAL_C,
-     optarg, optname, optind, argc, argv, env);
-    return err;
-}
-///////////////////////////////////////////////////////////////////////
-virtual int on_help_option
-(int optval, const char* optarg,
- const char* optname, int optind,
- int argc, char**argv, char**env) {
-    int err = usage(argc, argv, env);
     return err;
 }
 
@@ -358,6 +408,14 @@ virtual int on_option
         err = on_reflective_option
         (optval, optarg, optname, optind, argc, argv, env);
         break;
+    case EV_APP_CONSOLE_LS_MAIN_SKIP_DIRECTORY_FILE_OPTVAL_C:
+        err = on_skip_directory_file_option
+        (optval, optarg, optname, optind, argc, argv, env);
+        break;
+    case EV_APP_CONSOLE_LS_MAIN_SKIP_DIRECTORY_OPTVAL_C:
+        err = on_skip_directory_option
+        (optval, optarg, optname, optind, argc, argv, env);
+        break;
     case EV_APP_CONSOLE_LS_MAIN_MATCH_FILE_OPTVAL_C:
         err = on_match_file_option
         (optval, optarg, optname, optind, argc, argv, env);
@@ -382,6 +440,14 @@ virtual int on_option
         err = on_ignore_case_option
         (optval, optarg, optname, optind, argc, argv, env);
         break;
+    case EV_APP_CONSOLE_LS_MAIN_COMPARE_TO_OPTVAL_C:
+        err = on_compare_to_option
+        (optval, optarg, optname, optind, argc, argv, env);
+        break;
+    case EV_APP_CONSOLE_LS_MAIN_COMPARE_ALL_FILES_OPTVAL_C:
+        err = on_compare_all_files_option
+        (optval, optarg, optname, optind, argc, argv, env);
+        break;
     case EV_APP_CONSOLE_LS_MAIN_COMPARE_FILES_OPTVAL_C:
         err = on_compare_files_option
         (optval, optarg, optname, optind, argc, argv, env);
@@ -404,14 +470,6 @@ virtual int on_option
         break;
     case EV_APP_CONSOLE_LS_MAIN_EXCLUDE_LINKS_OPTVAL_C:
         err = on_exclude_links_option
-        (optval, optarg, optname, optind, argc, argv, env);
-        break;
-    case EV_APP_CONSOLE_LS_MAIN_DEBUG_LEVELS_OPTVAL_C:
-        err = on_debug_levels_option
-        (optval, optarg, optname, optind, argc, argv, env);
-        break;
-    case EV_APP_CONSOLE_LS_MAIN_HELP_OPTVAL_C:
-        err = on_help_option
         (optval, optarg, optname, optind, argc, argv, env);
         break;
     default:
@@ -483,6 +541,14 @@ virtual const char* option_usage
         optarg = EV_APP_CONSOLE_LS_MAIN_REFLECTIVE_OPTARG;
         chars = EV_APP_CONSOLE_LS_MAIN_REFLECTIVE_OPTUSE;
         break;
+    case EV_APP_CONSOLE_LS_MAIN_SKIP_DIRECTORY_FILE_OPTVAL_C:
+        optarg = EV_APP_CONSOLE_LS_MAIN_SKIP_DIRECTORY_FILE_OPTARG;
+        chars = EV_APP_CONSOLE_LS_MAIN_SKIP_DIRECTORY_FILE_OPTUSE;
+        break;
+    case EV_APP_CONSOLE_LS_MAIN_SKIP_DIRECTORY_OPTVAL_C:
+        optarg = EV_APP_CONSOLE_LS_MAIN_SKIP_DIRECTORY_OPTARG;
+        chars = EV_APP_CONSOLE_LS_MAIN_SKIP_DIRECTORY_OPTUSE;
+        break;
     case EV_APP_CONSOLE_LS_MAIN_MATCH_FILE_OPTVAL_C:
         optarg = EV_APP_CONSOLE_LS_MAIN_MATCH_FILE_OPTARG;
         chars = EV_APP_CONSOLE_LS_MAIN_MATCH_FILE_OPTUSE;
@@ -506,6 +572,14 @@ virtual const char* option_usage
     case EV_APP_CONSOLE_LS_MAIN_IGNORE_CASE_OPTVAL_C:
         optarg = EV_APP_CONSOLE_LS_MAIN_IGNORE_CASE_OPTARG;
         chars = EV_APP_CONSOLE_LS_MAIN_IGNORE_CASE_OPTUSE;
+        break;
+    case EV_APP_CONSOLE_LS_MAIN_COMPARE_TO_OPTVAL_C:
+        optarg = EV_APP_CONSOLE_LS_MAIN_COMPARE_TO_OPTARG;
+        chars = EV_APP_CONSOLE_LS_MAIN_COMPARE_TO_OPTUSE;
+        break;
+    case EV_APP_CONSOLE_LS_MAIN_COMPARE_ALL_FILES_OPTVAL_C:
+        optarg = EV_APP_CONSOLE_LS_MAIN_COMPARE_ALL_FILES_OPTARG;
+        chars = EV_APP_CONSOLE_LS_MAIN_COMPARE_ALL_FILES_OPTUSE;
         break;
     case EV_APP_CONSOLE_LS_MAIN_COMPARE_FILES_OPTVAL_C:
         optarg = EV_APP_CONSOLE_LS_MAIN_COMPARE_FILES_OPTARG;
@@ -531,14 +605,6 @@ virtual const char* option_usage
         optarg = EV_APP_CONSOLE_LS_MAIN_EXCLUDE_LINKS_OPTARG;
         chars = EV_APP_CONSOLE_LS_MAIN_EXCLUDE_LINKS_OPTUSE;
         break;
-    case EV_APP_CONSOLE_LS_MAIN_DEBUG_LEVELS_OPTVAL_C:
-        optarg = EV_APP_CONSOLE_LS_MAIN_DEBUG_LEVELS_OPTARG;
-        chars = EV_APP_CONSOLE_LS_MAIN_DEBUG_LEVELS_OPTUSE;
-        break;
-    case EV_APP_CONSOLE_LS_MAIN_HELP_OPTVAL_C:
-        optarg = EV_APP_CONSOLE_LS_MAIN_HELP_OPTARG;
-        chars = EV_APP_CONSOLE_LS_MAIN_HELP_OPTUSE;
-        break;
     default:
         chars = Extends::option_usage(optarg, longopt);
     }
@@ -560,12 +626,16 @@ virtual const char* options(const struct option*& longopts) {
 ///////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////
 virtual const char* arguments(const char**& args) {
-    static const char* _args = "source [target]";
+    static const char* _args = EV_APP_CONSOLE_LS_MAIN_ARGS;
     static const char* _argv[3] = {
-        "source - source directory",
-        "[target] - target directory", 0};
+        EV_APP_CONSOLE_LS_MAIN_ARGV
+        0};
     args = _argv;
     return _args;
 }
+
+#ifndef _EV_APP_CONSOLE_LS_MAIN_HPP
+};
+#endif // ndef _EV_APP_CONSOLE_LS_MAIN_HPP
 
 #endif // _EV_APP_CONSOLE_LS_MAIN_OPT_CPP

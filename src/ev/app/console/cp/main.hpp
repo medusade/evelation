@@ -110,7 +110,20 @@ protected:
             if ((optind+1 < argc)) {
 
                 target_path_.assign(argv[optind+1]);
-                err = copy(source_path_, target_path_);
+                switch (to_) {
+                case to_md5:
+                    err = copy_to_hash(source_path_, target_path_, md5_);
+                    break;
+                case to_sha1:
+                    err = copy_to_hash(source_path_, target_path_, sha1_);
+                    break;
+                case to_sha256:
+                    err = copy_to_hash(source_path_, target_path_, sha256_);
+                    break;
+                default:
+                    err = copy(source_path_, target_path_);
+                    break;
+                }
             } else {
                 switch (to_) {
                 case to_md5:
@@ -582,6 +595,172 @@ protected:
 
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
+    virtual int copy_to_hash
+    (const path_t& source, const path_t& target, hash_t& hash) {
+        entry_t& entry = source_entry_;
+        const char_t* chars = 0;
+        int err = 0;
+
+        if ((entry.exists(chars = source.chars()))) {
+            fs::entry_type type = fs::entry_type_none;
+
+            switch (type = entry.type()) {
+            case fs::entry_type_file:
+                err = copy_file_to_hash(entry, target, hash);
+                break;
+            default:
+                break;
+            }
+        } else {
+            errf("source file \"%s\" does not exist\n", chars);
+            err = 1;
+        }
+        return err;
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    virtual int copy_file_to_hash
+    (const entry_t& source, const path_t& target, hash_t& hash) {
+        entry_t& entry = target_entry_;
+        string_t target_path(target.chars());
+        const char_t* chars = 0;
+        int err = 1;
+
+        if ((append_hash_name_to_target_path_) && (chars = hash.name())) {
+            target_path.append(&target.extension_separator(), 1);
+            target_path.append(hash_name_prefix_);
+            target_path.append(chars);
+            target_path.append(hash_name_suffix_);
+        }
+
+        if ((entry.exists(chars = target_path.chars()))) {
+            if ((write_overwrite != write_) && (write_append != write_)) {
+                errf("target file \"%s\" already exists\n", chars);
+            } else {
+                fs::entry_type type = fs::entry_type_none;
+
+                switch (type = entry.type()) {
+                case fs::entry_type_file:
+                    err = copy_file_to_file_hash(source, entry, hash);
+                    break;
+                default:
+                    break;
+                }
+            }
+        } else {
+            if (!(err = make_directory(entry, target))) {
+                entry.set_path(chars);
+                err = copy_file_to_file_hash(source, entry, hash);
+            } else {
+                errf("failed to make directory \"%s\"\n", target.directory().chars());
+            }
+        }
+        if (!(err) && (!(to_same != to_) || !(target_modified_))) {
+            if ((entry.set_times_to_set(source))) {
+                if ((entry.set_times_set())) {
+                } else {
+                }
+            }
+        }
+        return err;
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    virtual int copy_file_to_file_hash
+    (const entry_t& source, const entry_t& target, hash_t& hash) {
+        const char_t* chars = 0;
+        size_t length = 0;
+        int err = 1;
+
+        if ((chars = source.path(length)) && (0 < length)) {
+            source_file_t source_file;
+
+            EV_LOG_MESSAGE_INFO("open source file \"" << chars << "\"...");
+            if ((source_file.open(chars, source_file.mode_read_binary()))) {
+                EV_LOG_MESSAGE_INFO("...opened source file \"" << chars << "\"");
+
+                err = copy_file_to_file_hash(source_file, target, hash);
+
+                EV_LOG_MESSAGE_INFO("close source file \"" << chars << "\"...");
+                if ((source_file.close())) {
+                    EV_LOG_MESSAGE_INFO("...closed source file \"" << chars << "\"");
+                } else {
+                    EV_LOG_MESSAGE_INFO("...failed to close source file \"" << chars << "\"");
+                }
+            } else {
+                EV_LOG_MESSAGE_ERROR("...failed to open source file \"" << chars << "\"");
+            }
+        }
+        return err;
+    }
+    ///////////////////////////////////////////////////////////////////////
+    virtual int copy_file_to_file_hash
+    (source_file_t& source, const entry_t& target, hash_t& hash) {
+        const char_t* chars = 0;
+        size_t length = 0;
+        int err = 1;
+
+        if ((chars = target.path(length)) && (0 < length)) {
+            target_file_t target_file;
+
+            EV_LOG_MESSAGE_INFO("open target file \"" << chars << "\"...");
+            if ((target_file.open
+                 (chars, (write_overwrite != write_)
+                  ?(target_file.mode_append_binary())
+                  :(target_file.mode_write_binary())))) {
+                EV_LOG_MESSAGE_INFO("...opened target file \"" << chars << "\"");
+
+                err = copy_file_to_file_hash(source, target_file, hash);
+
+                EV_LOG_MESSAGE_INFO("close target file \"" << chars << "\"...");
+                if ((target_file.close())) {
+                    EV_LOG_MESSAGE_INFO("...closed target file \"" << chars << "\"");
+                } else {
+                    EV_LOG_MESSAGE_INFO("...failed to close target file \"" << chars << "\"");
+                }
+            } else {
+                EV_LOG_MESSAGE_ERROR("...failed to open target file \"" << chars << "\"");
+            }
+        }
+        return err;
+    }
+    ///////////////////////////////////////////////////////////////////////
+    virtual int copy_file_to_file_hash
+    (source_file_t& source, target_file_t& target, hash_t& hash) {
+        int err = 1;
+        if (0 <= (hash.initialize())) {
+            err = 0;
+            for (ssize_t count = 0, amount = 0; 0 <= amount; count += amount) {
+                if (0 < (amount = source.read(block_, block_size_))) {
+                    if (amount != (hash.hash(block_, amount))) {
+                        err = 1;
+                    } else {
+                        continue;
+                    }
+                } else {
+                    if (0 > (amount)) {
+                        err = 1;
+                    }
+                }
+                if (!(err)) {
+                    if (0 < (count = hash.finalize(block_, block_size_))) {
+                        if (count > (target.writexln(block_, count))) {
+                            err = 1;
+                        }
+                    } else {
+                        err = 1;
+                    }
+                }
+                break;
+            }
+        }
+        return err;
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
     virtual int make_directory(entry_t& entry, const path_t& path) {
         const char_t* chars = 0;
         size_t length = 0;
@@ -674,6 +853,8 @@ protected:
     write_t write_;
     to_t to_;
     bool_t verbose_, test_;
+    bool_t append_hash_name_to_target_path_;
+    string_t hash_name_prefix_, hash_name_suffix_;
     size_t block_size_;
     char block_[EV_APP_CONSOLE_CP_MAIN_BLOCKSIZE];
 };

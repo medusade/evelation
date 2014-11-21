@@ -21,9 +21,9 @@
 #ifndef _EV_CRYPTO_BASE_HPP
 #define _EV_CRYPTO_BASE_HPP
 
-#include "talas/crypto/hash/openssl/sha256.hpp"
-#include "talas/crypto/hash/openssl/sha1.hpp"
-#include "talas/crypto/hash/openssl/md5.hpp"
+#include "talas/crypto/hash/implementation/sha256.hpp"
+#include "talas/crypto/hash/implementation/sha1.hpp"
+#include "talas/crypto/hash/implementation/md5.hpp"
 
 namespace ev {
 namespace crypto {
@@ -31,9 +31,9 @@ namespace crypto {
 namespace hash {
 
 typedef talas::crypto::hash::base base;
-typedef talas::crypto::hash::openssl::md5 md5;
-typedef talas::crypto::hash::openssl::sha1 sha1;
-typedef talas::crypto::hash::openssl::sha256 sha256;
+typedef talas::crypto::hash::implementation::md5 md5;
+typedef talas::crypto::hash::implementation::sha1 sha1;
+typedef talas::crypto::hash::implementation::sha256 sha256;
 
 } // namespace hash
 

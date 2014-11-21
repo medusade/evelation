@@ -147,6 +147,9 @@ public:
     virtual const char_t& directory_separator() const {
         return directory_separator_;
     }
+    virtual const char_t& extension_separator() const {
+        return extension_separator_;
+    }
 
 protected:
     ///////////////////////////////////////////////////////////////////////
