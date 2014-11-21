@@ -30,6 +30,7 @@ ${EV_SRC}/ev/fs/path/match/read/events.cpp \
 ${EV_SRC}/ev/fs/path/separator.cpp \
 ${EV_SRC}/ev/fs/path/parts.cpp \
 ${EV_SRC}/ev/app/console/ls/main.cpp \
+${EV_SRC}/ev/console/main_main.cpp \
 
 ########################################################################
 # talas
@@ -37,9 +38,4 @@ evls_CPP_SOURCES += \
 ${TALAS_SRC}/talas/crypto/hash/openssl/sha256.cpp \
 ${TALAS_SRC}/talas/crypto/hash/mac.cpp \
 ${TALAS_SRC}/talas/crypto/hash/base.cpp \
-
-########################################################################
-# xos
-evls_CPP_SOURCES += \
-${XOS_SRC}/xos/nadir/xos/base/main_main.cpp \
 

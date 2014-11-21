@@ -26,6 +26,7 @@ EV_LIB = $${EV_BLD}/lib
 EV_SRC = $${EV_PKG}/src
 
 ########################################################################
+# talas
 TALAS_PKG = $${EV_PKG}/../talas
 TALAS_PRJ = $${TALAS_PKG}
 TALAS_SRC = $${TALAS_PKG}/src
@@ -36,12 +37,13 @@ $${TALAS_SRC} \
 talas_DEFINES += \
 
 ########################################################################
-XOS_PKG = $${EV_PKG}/../xos
+# xos
+XOS_PKG = $${EV_PKG}/../nadir
 XOS_PRJ = $${XOS_PKG}
 XOS_SRC = $${XOS_PKG}/src
 
 xos_INCLUDEPATH += \
-$${XOS_SRC}/xos/nadir \
+$${XOS_SRC} \
 
 xos_DEFINES += \
 

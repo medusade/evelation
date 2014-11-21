@@ -25,7 +25,7 @@ EV_SRC = ${EV_PKG}/src
 
 ########################################################################
 # xos
-XOS_PKG = ${EV_PKG}/../xos
+XOS_PKG = ${EV_PKG}/../nadir
 XOS_SRC = ${XOS_PKG}/src
 XOS_BLD = ${XOS_PKG}/${BLD}/${BUILD_TYPE}
 XOS_LIB = ${XOS_BLD}/lib
@@ -46,7 +46,7 @@ ev_USRDEFINES += \
 ev_USRINCLUDES += \
 -I${EV_SRC} \
 -I${TALAS_SRC} \
--I${XOS_SRC}/xos/nadir \
+-I${XOS_SRC} \
 
 ev_USRLIBDIRS += \
 -L${TALAS_LIB} \

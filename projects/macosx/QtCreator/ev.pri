@@ -18,9 +18,21 @@
 # Author: $author$
 #   Date: 10/30/2014
 ########################################################################
-XOS_BLD = ../../../../../../../xos/build/macosx/QtCreator/Debug
+
+########################################################################
+# talas
+TALAS_BLD = ../$${TALAS_PKG}/build/macosx/QtCreator/Debug
+TALAS_LIB = $${TALAS_BLD}/lib
+
+########################################################################
+# xos
+XOS_BLD = ../$${XOS_PKG}/build/macosx/QtCreator/Debug
 XOS_LIB = $${XOS_BLD}/lib
 
+########################################################################
+
 ev_LIBS += \
+-L$${TALAS_LIB}/libtalas \
+-ltalas \
 -L$${XOS_LIB}/libxosnadir \
 -lxosnadir \
