@@ -367,12 +367,14 @@ protected:
             if ((source_file.open(chars, source_file.mode_read_binary()))) {
                 EV_LOG_MESSAGE_INFO("...opened source file \"" << chars << "\"");
 
-                unequal = compare_files(source_file, target);
+                if ((unequal = compare_files(source_file, target))) {
+                    EV_LOG_MESSAGE_INFO
+                    ("source file \"" << source.path() << "\" != target file \"" << target.path() << "\"");
+                }
 
                 EV_LOG_MESSAGE_INFO("close source file \"" << chars << "\"...");
                 if ((source_file.close())) {
                     EV_LOG_MESSAGE_INFO("...closed source file \"" << chars << "\"");
-                    return length;
                 } else {
                     EV_LOG_MESSAGE_INFO("...failed to close source file \"" << chars << "\"");
                 }
@@ -401,7 +403,6 @@ protected:
                 EV_LOG_MESSAGE_INFO("close target file \"" << chars << "\"...");
                 if ((target_file.close())) {
                     EV_LOG_MESSAGE_INFO("...closed target file \"" << chars << "\"");
-                    return length;
                 } else {
                     EV_LOG_MESSAGE_INFO("...failed to close target file \"" << chars << "\"");
                 }
@@ -414,18 +415,24 @@ protected:
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
     virtual int compare_files(source_file_t& source, source_file_t& target) {
+        ssize_t s_count = 0, t_count = 0;
         int unequal = 0;
-        for (ssize_t s_amount = 0, t_amount = 0; 0 <= s_amount; ) {
+        for (ssize_t s_amount = 0, t_amount = 0; 0 <= s_amount; s_count += s_amount, t_count += t_amount) {
             if (0 < (s_amount = source.read(source_block_, block_size_))) {
                 if (0 < (t_amount = target.read(target_block_, block_size_))) {
                     if (s_amount < t_amount) {
+                        EV_LOG_MESSAGE_INFO("read " << s_amount << " from source < " << t_amount << " from target");
                         return unequal = -1;
                     } else {
                         if (s_amount > t_amount) {
+                            EV_LOG_MESSAGE_INFO("read " << s_amount << " from source > " << t_amount << " from target");
                             return unequal = 1;
                         } else {
                             if ((unequal = memcmp(source_block_, target_block_, s_amount))) {
+                                EV_LOG_MESSAGE_INFO("source[" << s_count << "] != target[" << t_count << "]");
                                 return unequal;
+                            } else {
+                                continue;
                             }
                         }
                     }
@@ -434,11 +441,13 @@ protected:
                 }
             } else {
                 if (0 < (t_amount = target.read(target_block_, block_size_))) {
+                    EV_LOG_MESSAGE_INFO("read " << s_amount << " from source != " << t_amount << " from target");
                     return unequal = -1;
                 }
             }
             break;
         }
+        EV_LOG_MESSAGE_INFO("source[" << s_count << "] == target[" << t_count << "]");
         return unequal;
     }
 
