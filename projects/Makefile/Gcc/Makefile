@@ -52,5 +52,6 @@ ev_USRLIBDIRS += \
 -L${TALAS_LIB} \
 -L${XOS_LIB} \
 
-ev_USRLIBS += \
+ev_LIBS += \
+-ltalas \
 -lxosnadir \

@@ -26,6 +26,7 @@ MAK = projects/Makefile/Gcc
 PRJ = projects/macosx/Makefile/Gcc
 SRC = src
 
+include $(PKG)/$(MAK)/Makedefines
 include $(PKG)/$(PRJ)/Makedefines
 include $(PKG)/$(MAK)/Makefile
 include $(PKG)/$(MAK)/app/evcp/Makefile
@@ -108,7 +109,7 @@ EXE_MM_SOURCES = \
 #-lsomelib
 #
 LIBS = \
-${ev_USRLIBS} \
+${ev_LIBS} \
 -lpthread \
 -ldl \
 

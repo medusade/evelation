@@ -20,3 +20,26 @@
 #
 # MacOSX Gcc Makedirs for evelation
 ########################################################################
+all:
+	@for dir in $(SRC_DIRS); do \
+		echo "Make $$dir" ; \
+		(cd $$dir && make) || (echo "Make $$dir Failed") ; \
+	done
+
+install:
+	@for dir in $(SRC_DIRS); do \
+		echo "Make $$dir install" ; \
+		(cd $$dir && make install) || (echo "Make $$dir install Failed") ; \
+	done
+
+clean:
+	@for dir in $(SRC_DIRS); do \
+		echo "Make $$dir clean" ; \
+		(cd $$dir && make clean) || (echo "Make $$dir clean Failed") ; \
+	done
+
+again:
+	@for dir in $(SRC_DIRS); do \
+		echo "Make $$dir again" ; \
+		(cd $$dir && make again) || (echo "Make $$dir again Failed") ; \
+	done

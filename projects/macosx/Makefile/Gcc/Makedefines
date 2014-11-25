@@ -34,10 +34,16 @@ ifndef BLD
 BLD = build/macosx
 endif
 
+ifndef INS
+INS = $(HOME)/$(BLD)
+endif
+
 PKGROOT = $(PKG)
 PKGBLD = $(PKG)/$(BLD)/$(BUILD_TYPE)
 BINDIR = $(PKGBLD)/bin
 LIBDIR = $(PKGBLD)/lib
+INSBIN = $(INS)/bin
+INSLIB = $(INS)/lib
 
 COMPILER_PATH =
 COMPILER_PREFIX =

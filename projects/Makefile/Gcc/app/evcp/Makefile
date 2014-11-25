@@ -29,13 +29,3 @@ ${EV_SRC}/ev/fs/path/separator.cpp \
 ${EV_SRC}/ev/fs/path/parts.cpp \
 ${EV_SRC}/ev/app/console/cp/main.cpp \
 ${EV_SRC}/ev/console/main_main.cpp \
-
-########################################################################
-# talas
-evcp_CPP_SOURCES += \
-${TALAS_SRC}/talas/crypto/hash/openssl/sha256.cpp \
-${TALAS_SRC}/talas/crypto/hash/openssl/sha1.cpp \
-${TALAS_SRC}/talas/crypto/hash/openssl/md5.cpp \
-${TALAS_SRC}/talas/crypto/hash/mac.cpp \
-${TALAS_SRC}/talas/crypto/hash/base.cpp \
-

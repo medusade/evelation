@@ -21,6 +21,18 @@
 # MacOSX Gcc Makerules
 ########################################################################
 
+ifdef LIBTARGET
+LIBINSTALL = install-lib
+endif
+
+ifdef SLIBTARGET
+SLIBINSTALL = install-slib
+endif
+
+ifdef EXETARGET
+EXEINSTALL = install-exe
+endif
+
 LIB_C_OBJS=$(LIB_C_SOURCES:.c=.o)
 LIB_M_OBJS=$(LIB_M_SOURCES:.m=.o)
 LIB_CC_OBJS=$(LIB_CC_SOURCES:.cc=.o)
@@ -48,7 +60,13 @@ EXE_OBJS = $(EXE_C_OBJS) $(EXE_M_OBJS) $(EXE_CC_OBJS) $(EXE_MM_OBJS) $(EXE_CPP_O
 ALL_OBJS = $(OBJS) $(LIB_OBJS) $(SLIB_OBJS) $(EXE_OBJS)
 ALL_TARGETS = $(EXETARGET) $(LIBTARGET) $(SLIBTARGET) $(USRTARGET)
 
+#
+# rules
+#
+
 all: ${LIBTARGET} ${SLIBTARGET} ${KMODTARGET} ${EXETARGET}
+
+install: ${LIBINSTALL} ${SLIBINSTALL} ${EXEINSTALL}
 
 again: clean all
 
@@ -78,6 +96,10 @@ veryclean:
 build-type:
 	@echo "BUILD_TYPE =" $(BUILD_TYPE)
 
+#
+# echo
+#
+
 cxxflags:
 	@echo "CXXFLAGS =" $(CXXFLAGS)
 
@@ -104,6 +126,39 @@ ar:
 
 cxxld:
 	@echo "CXXLD =" $(CXXLD) ${INCLUDES} $(LDFLAGS) -o ${EXETARGET} $(EXE_OBJS) $(EXE_USROBJS) $(LIBS)
+
+#
+# install
+#
+
+install-lib: ${LIBTARGET} ${INSLIB}
+	@(echo "Installing Lib - " ${LIBTARGET}...;\
+	  ((cp -r $(LIBDIR)/${LIBTARGET} $(INSLIB)) || (exit 1));\
+	  echo ..."Installed Lib - " ${LIBTARGET})
+
+install-slib: ${SLIBTARGET} ${INSLIB}
+	@(echo "Installing Shared Lib - " ${SLIBTARGET}...;\
+	  ((cp -r $(LIBDIR)/${SLIBTARGET} $(INSLIB)) || (exit 1));\
+	  echo ..."Installed Shared Lib - " ${SLIBTARGET})
+
+install-exe: ${EXETARGET} ${INSBIN}
+	@(echo "Installing Exe - " ${EXETARGET}...;\
+	  ((cp -r $(BINDIR)/${EXETARGET} $(INSBIN)) || (exit 1));\
+	  echo ..."Installed Exe - " ${EXETARGET})
+
+${INSBIN}:
+	@(echo "Makeing Binary Directory - " ${INSBIN}...;\
+	  ((mkdir -p $(INSBIN)) || (exit 1));\
+	  echo ..."Made Binary Directory - " ${INSBIN})
+
+${INSLIB}:
+	@(echo "Makeing Library Directory - " ${INSLIB}...;\
+	  ((mkdir -p $(INSLIB)) || (exit 1));\
+	  echo ..."Made Library Directory - " ${INSLIB})
+
+#
+# build
+#
 
 ${BINDIR}:
 	@echo "Makeing Binary Directory" $@ ...
