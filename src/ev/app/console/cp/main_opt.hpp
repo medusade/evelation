@@ -36,13 +36,15 @@
 #define EV_CONSOLE_CP_MAIN_TO_OPTARG_NATIVE_S "native"
 #define EV_CONSOLE_CP_MAIN_TO_OPTARG_SAME_C 's'
 #define EV_CONSOLE_CP_MAIN_TO_OPTARG_SAME_S "same"
-#define EV_CONSOLE_CP_MAIN_TO_OPTARG_SHA256_C '2'
+#define EV_CONSOLE_CP_MAIN_TO_OPTARG_SHA512_C '2'
+#define EV_CONSOLE_CP_MAIN_TO_OPTARG_SHA512_S "sha512"
+#define EV_CONSOLE_CP_MAIN_TO_OPTARG_SHA256_C '6'
 #define EV_CONSOLE_CP_MAIN_TO_OPTARG_SHA256_S "sha256"
 #define EV_CONSOLE_CP_MAIN_TO_OPTARG_SHA1_C '1'
 #define EV_CONSOLE_CP_MAIN_TO_OPTARG_SHA1_S "sha1"
 #define EV_CONSOLE_CP_MAIN_TO_OPTARG_MD5_C '5'
 #define EV_CONSOLE_CP_MAIN_TO_OPTARG_MD5_S "md5"
-#define EV_CONSOLE_CP_MAIN_TO_OPTARG "{(d)dos | (m)mac | (u)unix | (n)native | (s)same | (2)sha256 | (1)sha1 | (5)md5}"
+#define EV_CONSOLE_CP_MAIN_TO_OPTARG "{(d)dos | (m)mac | (u)unix | (n)native | (s)same | (2)sha512 | (6)sha256 | (1)sha1 | (5)md5}"
 #define EV_CONSOLE_CP_MAIN_TO_OPTUSE ""
 #define EV_CONSOLE_CP_MAIN_TO_OPTVAL_S "2:"
 #define EV_CONSOLE_CP_MAIN_TO_OPTVAL_C '2'

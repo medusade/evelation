@@ -94,6 +94,7 @@ public:
     ///////////////////////////////////////////////////////////////////////
 protected:
     typedef crypto::hash::base hash_t;
+    typedef crypto::hash::sha512 sha512_t;
     typedef crypto::hash::sha256 sha256_t;
     typedef crypto::hash::sha1 sha1_t;
     typedef crypto::hash::md5 md5_t;
@@ -102,6 +103,7 @@ protected:
     typedef io::read::file source_file_t;
     enum compare_to_t {
         compare_to_file,
+        compare_to_sha512,
         compare_to_sha256,
         compare_to_sha1,
         compare_to_md5
@@ -110,8 +112,9 @@ protected:
 protected:
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
-    virtual int run(int argc, char** argv, char **env) {
+    virtual int run(int argc, char_t** argv, char_t** env) {
         int err = 0;
+        const char_t* chars = 0;
 
         if ((optind < argc))
             source_.assign(argv[optind]);
@@ -119,15 +122,17 @@ protected:
         if ((optind+1 < argc))
             target_.assign(argv[optind+1]);
 
-        if (0 < (source_.length())) {
+        if ((chars = source_.has_chars())) {
             os::os::fs::directory::path path;
-            if ((path.open(source_.c_str()))) {
+            if ((path.open(chars))) {
                 fs::directory::entry* e;
                 fs::path::parts p;
                 for (e = path.get_first_entry(); e; e = path.get_next_entry()) {
                     p.assign(e->path());
                     on_entry(*e, p, source_, target_);
                 }
+            } else {
+                EV_LOG_MESSAGE_DEBUG("directory \"" << chars << "\" does not exist");
             }
         } else {
             err = usage(argc, argv, env);
@@ -174,6 +179,8 @@ protected:
                             p.assign(e->path());
                             on_entry(*e, p, source_, target_);
                         }
+                    } else {
+                        EV_LOG_MESSAGE_DEBUG("directory \"" << pchars << "\" does not exist");
                     }
                 }
             }
@@ -220,8 +227,15 @@ protected:
             }
             return on_match_file_entry_existing_target(e, t);
         } else {
-            if ((existing_files_on_) || (fs::entry_type_none != (t.type())))
+            if ((fs::entry_type_none != (t.type()))) {
+                EV_LOG_MESSAGE_DEBUG("file \"" << e.path() << "\" not same type as \"" << target << "\"");
                 return false;
+            } else {
+                EV_LOG_MESSAGE_DEBUG("target file \"" << target << "\" does not exist");
+                if ((existing_files_on_) || (fs::entry_type_none != (t.type()))) {
+                    return false;
+                }
+            }
         }
         return true;
     }
@@ -537,6 +551,9 @@ protected:
     virtual hash_t* file_hash() const {
         hash_t* hash = 0;
         switch (compare_to_) {
+        case compare_to_sha512:
+            hash = (hash_t*)&sha512_;
+            break;
         case compare_to_sha256:
             hash = (hash_t*)&sha256_;
             break;
@@ -561,6 +578,7 @@ protected:
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
 protected:
+    sha512_t sha512_;
     sha256_t sha256_;
     sha1_t sha1_;
     md5_t md5_;

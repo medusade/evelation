@@ -54,20 +54,25 @@ class {
                                 || !(chars_t::compare(optarg, EV_CONSOLE_CP_MAIN_TO_OPTARG_SAME_S))) {
                                 to_ = to_same;
                             } else {
-                                if ((!(optarg[1]) && (EV_CONSOLE_CP_MAIN_TO_OPTARG_SHA256_C == (optarg[0])))
-                                    || !(chars_t::compare(optarg, EV_CONSOLE_CP_MAIN_TO_OPTARG_SHA256_S))) {
-                                    to_ = to_sha256;
+                                if ((!(optarg[1]) && (EV_CONSOLE_CP_MAIN_TO_OPTARG_SHA512_C == (optarg[0])))
+                                    || !(chars_t::compare(optarg, EV_CONSOLE_CP_MAIN_TO_OPTARG_SHA512_S))) {
+                                    to_ = to_sha512;
                                 } else {
-                                    if ((!(optarg[1]) && (EV_CONSOLE_CP_MAIN_TO_OPTARG_SHA1_C == (optarg[0])))
-                                        || !(chars_t::compare(optarg, EV_CONSOLE_CP_MAIN_TO_OPTARG_SHA1_S))) {
-                                        to_ = to_sha1;
+                                    if ((!(optarg[1]) && (EV_CONSOLE_CP_MAIN_TO_OPTARG_SHA256_C == (optarg[0])))
+                                        || !(chars_t::compare(optarg, EV_CONSOLE_CP_MAIN_TO_OPTARG_SHA256_S))) {
+                                        to_ = to_sha256;
                                     } else {
-                                        if ((!(optarg[1]) && (EV_CONSOLE_CP_MAIN_TO_OPTARG_MD5_C == (optarg[0])))
-                                            || !(chars_t::compare(optarg, EV_CONSOLE_CP_MAIN_TO_OPTARG_MD5_S))) {
-                                            to_ = to_md5;
+                                        if ((!(optarg[1]) && (EV_CONSOLE_CP_MAIN_TO_OPTARG_SHA1_C == (optarg[0])))
+                                            || !(chars_t::compare(optarg, EV_CONSOLE_CP_MAIN_TO_OPTARG_SHA1_S))) {
+                                            to_ = to_sha1;
                                         } else {
-                                            err = on_invalid_option_arg
-                                            (optval, optarg, optname, optind, argc, argv, env);
+                                            if ((!(optarg[1]) && (EV_CONSOLE_CP_MAIN_TO_OPTARG_MD5_C == (optarg[0])))
+                                                || !(chars_t::compare(optarg, EV_CONSOLE_CP_MAIN_TO_OPTARG_MD5_S))) {
+                                                to_ = to_md5;
+                                            } else {
+                                                err = on_invalid_option_arg
+                                                (optval, optarg, optname, optind, argc, argv, env);
+                                            }
                                         }
                                     }
                                 }

@@ -98,7 +98,11 @@ public:
     ///////////////////////////////////////////////////////////////////////
     virtual ev::fs::entry_type set_found(const struct dirent& dirent) {
         set_found_type(dirent);
+#if defined(MACOSX)
         this->set_name(dirent.d_name, dirent.d_namlen);
+#else // defined(MACOSX)
+        this->set_name(dirent.d_name);
+#endif // defined(MACOSX)
         return this->get_found();
     }
 

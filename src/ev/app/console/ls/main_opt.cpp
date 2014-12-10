@@ -265,12 +265,17 @@ virtual int on_compare_to_option
                 || !(chars_t::compare(optarg, EV_APP_CONSOLE_LS_MAIN_COMPARE_TO_OPTARG_SHA256_S))) {
                 compare_to_ = compare_to_sha256;
             } else {
-                if ((!(optarg[1]) && (EV_APP_CONSOLE_LS_MAIN_COMPARE_TO_OPTARG_FILE_C[0] == (optarg[0])))
-                    || !(chars_t::compare(optarg, EV_APP_CONSOLE_LS_MAIN_COMPARE_TO_OPTARG_FILE_S))) {
-                    compare_to_ = compare_to_file;
+                if ((!(optarg[1]) && (EV_APP_CONSOLE_LS_MAIN_COMPARE_TO_OPTARG_SHA512_C[0] == (optarg[0])))
+                    || !(chars_t::compare(optarg, EV_APP_CONSOLE_LS_MAIN_COMPARE_TO_OPTARG_SHA512_S))) {
+                    compare_to_ = compare_to_sha512;
                 } else {
-                    err = on_invalid_option_arg
-                    (optval, optarg, optname, optind, argc, argv, env);
+                    if ((!(optarg[1]) && (EV_APP_CONSOLE_LS_MAIN_COMPARE_TO_OPTARG_FILE_C[0] == (optarg[0])))
+                        || !(chars_t::compare(optarg, EV_APP_CONSOLE_LS_MAIN_COMPARE_TO_OPTARG_FILE_S))) {
+                        compare_to_ = compare_to_file;
+                    } else {
+                        err = on_invalid_option_arg
+                        (optval, optarg, optname, optind, argc, argv, env);
+                    }
                 }
             }
         }

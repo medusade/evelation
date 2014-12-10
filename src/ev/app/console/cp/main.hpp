@@ -63,6 +63,7 @@ protected:
     typedef crypto::hash::md5 md5_t;
     typedef crypto::hash::sha1 sha1_t;
     typedef crypto::hash::sha256 sha256_t;
+    typedef crypto::hash::sha512 sha512_t;
     typedef fs::path::parts path_t;
     typedef os::os::fs::entry entry_t;
     typedef io::read::file source_file_t;
@@ -78,6 +79,7 @@ protected:
         to_mac,
         to_unix,
         to_native,
+        to_sha512,
         to_sha256,
         to_sha1,
         to_md5
@@ -120,6 +122,9 @@ protected:
                 case to_sha256:
                     err = copy_to_hash(source_path_, target_path_, sha256_);
                     break;
+                case to_sha512:
+                    err = copy_to_hash(source_path_, target_path_, sha512_);
+                    break;
                 default:
                     err = copy(source_path_, target_path_);
                     break;
@@ -135,13 +140,18 @@ protected:
                 case to_sha256:
                     err = copy_to_hash(source_path_, sha256_);
                     break;
+                case to_sha512:
+                    err = copy_to_hash(source_path_, sha512_);
+                    break;
                 default:
                     err = missing_argument(EV_CONSOLE_CP_MAIN_TARGET_ARG);
+                    usage(argc, argv, env);
                     break;
                 }
             }
         } else {
             err = missing_argument(EV_CONSOLE_CP_MAIN_SOURCE_ARG);
+            usage(argc, argv, env);
         }
         return err;
     }
@@ -847,6 +857,7 @@ protected:
     md5_t md5_;
     sha1_t sha1_;
     sha256_t sha256_;
+    sha512_t sha512_;
     path_t source_path_, target_path_;
     entry_t source_entry_, target_entry_;
     bool_t target_modified_;
