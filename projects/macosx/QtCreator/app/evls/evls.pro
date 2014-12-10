@@ -20,62 +20,31 @@
 ########################################################################
 include(../../../../QtCreator/ev.pri)
 include(../../ev.pri)
+include(../../../../QtCreator/app/evls/evls.pri)
 
 TARGET = evls
 
 INCLUDEPATH += \
-$${ev_INCLUDEPATH} \
+$${evls_INCLUDEPATH} \
 
 DEFINES += \
-$${ev_DEFINES} \
+$${evls_DEFINES} \
 
 ########################################################################
 HEADERS += \
-$${TALAS_SRC}/talas/crypto/hash/openssl/sha256.hpp \
-$${TALAS_SRC}/talas/crypto/hash/sha256.hpp \
-$${TALAS_SRC}/talas/crypto/hash/mac.hpp \
-$${TALAS_SRC}/talas/crypto/hash/base.hpp \
-$${TALAS_SRC}/talas/crypto/base.hpp \
-$${TALAS_SRC}/talas/base/base.hpp \
-
-SOURCES += \
-$${TALAS_SRC}/talas/crypto/hash/openssl/sha256.cpp \
-$${TALAS_SRC}/talas/crypto/hash/mac.cpp \
-$${TALAS_SRC}/talas/crypto/hash/base.cpp \
-
-########################################################################
-HEADERS += \
-$${EV_SRC}/ev/base/base.hpp \
-$${EV_SRC}/ev/crypto/base.hpp \
-$${EV_SRC}/ev/fs/entry.hpp \
-$${EV_SRC}/ev/fs/path/match/read/events.hpp \
-$${EV_SRC}/ev/fs/path/match/reader.hpp \
-$${EV_SRC}/ev/fs/path/matcher.hpp \
-$${EV_SRC}/ev/fs/path/matchers.hpp \
-$${EV_SRC}/ev/fs/path/separate/events.hpp \
-$${EV_SRC}/ev/fs/path/separator.hpp \
-$${EV_SRC}/ev/fs/path/parts.hpp \
-$${EV_SRC}/ev/fs/path/directory/name.hpp \
+$${evls_HEADERS} \
+$${EV_SRC}/ev/os/macosx/fs/directory/path.hpp \
+$${EV_SRC}/ev/os/macosx/fs/directory/entry.hpp \
+$${EV_SRC}/ev/os/macosx/fs/entry.hpp \
 $${EV_SRC}/ev/os/unix/fs/directory/path.hpp \
 $${EV_SRC}/ev/os/unix/fs/directory/entry.hpp \
 $${EV_SRC}/ev/os/unix/fs/entry.hpp \
-$${EV_SRC}/ev/fs/directory/path.hpp \
-$${EV_SRC}/ev/fs/directory/entry.hpp \
-$${EV_SRC}/ev/app/console/ls/main.hpp \
 
 SOURCES += \
-$${EV_SRC}/ev/fs/path/matcher.cpp \
-$${EV_SRC}/ev/fs/path/match/reader.cpp \
-$${EV_SRC}/ev/fs/path/match/read/events.cpp \
-$${EV_SRC}/ev/fs/path/separator.cpp \
-$${EV_SRC}/ev/fs/path/parts.cpp \
-$${EV_SRC}/ev/fs/path/directory/name.cpp \
-$${EV_SRC}/ev/os/unix/fs/directory/path.cpp \
-$${EV_SRC}/ev/os/unix/fs/directory/entry.cpp \
-$${EV_SRC}/ev/app/console/ls/main.cpp \
-$${EV_SRC}/ev/console/main_main.cpp \
+$${evls_SOURCES} \
+$${EV_SRC}/ev/os/macosx/fs/directory/path.cpp \
+$${EV_SRC}/ev/os/macosx/fs/directory/entry.cpp \
 
 LIBS += \
-$${ev_LIBS} \
--lpthread \
--ldl \
+$${evls_LIBS} \
+

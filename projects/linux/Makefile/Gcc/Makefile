@@ -16,45 +16,25 @@
 #   File: Makefile
 #
 # Author: $author$
-#   Date: 11/5/2014
+#   Date: 12/10/2014
 #
-# Common Gcc Makefile for evelation
+# Linux Gcc Makefile for evelation
 ########################################################################
-EV_PKG = ${PKG}
-EV_SRC = ${EV_PKG}/src
+PKG = ../../../..
 
-########################################################################
-# xos
-XOS_PKG = ${EV_PKG}/../nadir
-XOS_SRC = ${XOS_PKG}/src
-XOS_BLD = ${XOS_PKG}/${BLD}/${BUILD_TYPE}
-XOS_LIB = ${XOS_BLD}/lib
-XOS_BIN = ${XOS_BLD}/bin
+PRJ = projects/linux/Makefile/Gcc
+SRC = src
 
-########################################################################
-# talas
-TALAS_PKG = ${EV_PKG}/../talas
-TALAS_SRC = ${TALAS_PKG}/src
-TALAS_BLD = ${TALAS_PKG}/${BLD}/${BUILD_TYPE}
-TALAS_LIB = ${TALAS_BLD}/lib
-TALAS_BIN = ${TALAS_BLD}/bin
+include $(PKG)/$(PRJ)/Makedefines
 
-########################################################################
-# ev
-ev_USRDEFINES += \
+#
+# Source subdirs
+#
+#SRC_DIRS = \
+#$(PKG)/$(PRJ)/somedir \
+#
+SRC_DIRS = \
+$(PKG)/$(PRJ)/app/evcp \
+$(PKG)/$(PRJ)/app/evls \
 
-ev_USRINCLUDES += \
--I${EV_SRC} \
--I${TALAS_SRC} \
--I${XOS_SRC} \
-
-ev_USRCXXFLAGS += \
--std=c++11
-
-ev_USRLIBDIRS += \
--L${TALAS_LIB} \
--L${XOS_LIB} \
-
-ev_LIBS += \
--ltalas \
--lxosnadir \
+include $(PKG)/$(PRJ)/Makedirs

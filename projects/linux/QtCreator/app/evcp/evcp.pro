@@ -13,30 +13,48 @@
 # or otherwise) arising in any way out of the use of this software, 
 # even if advised of the possibility of such damage.
 #
-#   File: ev.pri
+#   File: evcp.pro
 #
 # Author: $author$
-#   Date: 10/30/2014
+#   Date: 12/10/2014
 ########################################################################
+include(../../../../QtCreator/ev.pri)
+include(../../ev.pri)
 
-QMAKE_CXXFLAGS += -std=c++11
+TARGET = evcp
 
-########################################################################
-# talas
-TALAS_BLD = ../$${TALAS_PKG}/build/macosx/QtCreator/Debug
-TALAS_LIB = $${TALAS_BLD}/lib
+INCLUDEPATH += \
+$${ev_INCLUDEPATH} \
 
-########################################################################
-# xos
-XOS_BLD = ../$${XOS_PKG}/build/macosx/QtCreator/Debug
-XOS_LIB = $${XOS_BLD}/lib
+DEFINES += \
+$${ev_DEFINES} \
 
 ########################################################################
+HEADERS += \
+$${EV_SRC}/ev/os/unix/fs/directory/path.hpp \
+$${EV_SRC}/ev/os/unix/fs/directory/entry.hpp \
+$${EV_SRC}/ev/os/unix/fs/entry.hpp \
+$${EV_SRC}/ev/fs/directory/path.hpp \
+$${EV_SRC}/ev/fs/directory/entry.hpp \
+$${EV_SRC}/ev/fs/entry.hpp \
+$${EV_SRC}/ev/fs/path/separate/events.hpp \
+$${EV_SRC}/ev/fs/path/separator.hpp \
+$${EV_SRC}/ev/fs/path/parts.hpp \
+$${EV_SRC}/ev/crypto/base.hpp \
+$${EV_SRC}/ev/base/base.hpp \
+$${EV_SRC}/ev/app/console/cp/main.hpp \
+$${EV_SRC}/ev/console/main.hpp \
+$${EV_SRC}/ev/console/main_main.hpp \
 
-ev_LIBS += \
--L$${TALAS_LIB}/libtalas \
--ltalas \
--L$${XOS_LIB}/libxosnadir \
--lxosnadir \
--lpthread \
--ldl \
+SOURCES += \
+$${EV_SRC}/ev/os/unix/fs/directory/path.cpp \
+$${EV_SRC}/ev/os/unix/fs/directory/entry.cpp \
+$${EV_SRC}/ev/fs/path/separate/events.cpp \
+$${EV_SRC}/ev/fs/path/separator.cpp \
+$${EV_SRC}/ev/fs/path/parts.cpp \
+$${EV_SRC}/ev/app/console/cp/main.cpp \
+$${EV_SRC}/ev/console/main_main.cpp \
+
+LIBS += \
+$${ev_LIBS} \
+

@@ -13,38 +13,54 @@
 # or otherwise) arising in any way out of the use of this software, 
 # even if advised of the possibility of such damage.
 #
-#   File: evcp.pro
+#   File: evls.pro
 #
 # Author: $author$
-#   Date: 11/8/2014
+#   Date: 12/10/2014
 ########################################################################
 include(../../../../QtCreator/ev.pri)
 include(../../ev.pri)
-include(../../../../QtCreator/app/evcp/evcp.pri)
 
-TARGET = evcp
+TARGET = evls
 
 INCLUDEPATH += \
-$${evcp_INCLUDEPATH} \
+$${ev_INCLUDEPATH} \
 
 DEFINES += \
-$${evcp_DEFINES} \
+$${ev_DEFINES} \
 
 ########################################################################
 HEADERS += \
-$${evcp_HEADERS} \
-$${EV_SRC}/ev/os/macosx/fs/directory/path.hpp \
-$${EV_SRC}/ev/os/macosx/fs/directory/entry.hpp \
-$${EV_SRC}/ev/os/macosx/fs/entry.hpp \
+$${EV_SRC}/ev/base/base.hpp \
+$${EV_SRC}/ev/crypto/base.hpp \
+$${EV_SRC}/ev/fs/entry.hpp \
+$${EV_SRC}/ev/fs/path/match/read/events.hpp \
+$${EV_SRC}/ev/fs/path/match/reader.hpp \
+$${EV_SRC}/ev/fs/path/matcher.hpp \
+$${EV_SRC}/ev/fs/path/matchers.hpp \
+$${EV_SRC}/ev/fs/path/separate/events.hpp \
+$${EV_SRC}/ev/fs/path/separator.hpp \
+$${EV_SRC}/ev/fs/path/parts.hpp \
+$${EV_SRC}/ev/fs/path/directory/name.hpp \
 $${EV_SRC}/ev/os/unix/fs/directory/path.hpp \
 $${EV_SRC}/ev/os/unix/fs/directory/entry.hpp \
 $${EV_SRC}/ev/os/unix/fs/entry.hpp \
+$${EV_SRC}/ev/fs/directory/path.hpp \
+$${EV_SRC}/ev/fs/directory/entry.hpp \
+$${EV_SRC}/ev/app/console/ls/main.hpp \
 
 SOURCES += \
-$${evcp_SOURCES} \
-$${EV_SRC}/ev/os/macosx/fs/directory/path.cpp \
-$${EV_SRC}/ev/os/macosx/fs/directory/entry.cpp \
+$${EV_SRC}/ev/fs/path/matcher.cpp \
+$${EV_SRC}/ev/fs/path/match/reader.cpp \
+$${EV_SRC}/ev/fs/path/match/read/events.cpp \
+$${EV_SRC}/ev/fs/path/separator.cpp \
+$${EV_SRC}/ev/fs/path/parts.cpp \
+$${EV_SRC}/ev/fs/path/directory/name.cpp \
+$${EV_SRC}/ev/os/unix/fs/directory/path.cpp \
+$${EV_SRC}/ev/os/unix/fs/directory/entry.cpp \
+$${EV_SRC}/ev/app/console/ls/main.cpp \
+$${EV_SRC}/ev/console/main_main.cpp \
 
 LIBS += \
-$${evcp_LIBS} \
+$${ev_LIBS} \
 

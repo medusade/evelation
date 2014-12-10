@@ -32,19 +32,9 @@ include $(PKG)/$(MAK)/Makefile
 include $(PKG)/$(MAK)/app/evls/Makefile
 
 #
-# user ld flags
+# target
 #
-USRLDFLAGS = \
-
-#
-# user c flags
-#
-USRCFLAGS = \
-
-#
-# user c++ flags
-#
-USRCXXFLAGS = \
+EXETARGET = evls
 
 #
 # user defines
@@ -65,9 +55,22 @@ USRLIBDIRS = \
 ${ev_USRLIBDIRS} \
 
 #
-# target
+# user c++ flags
 #
-EXETARGET = evls
+USRCXXFLAGS = \
+${ev_USRCXXFLAGS} \
+
+#
+# user c flags
+#
+USRCFLAGS = \
+${ev_USRCFLAGS} \
+
+#
+# user ld flags
+#
+USRLDFLAGS = \
+${ev_USRLDFLAGS} \
 
 #
 # Executable C sources
@@ -110,8 +113,6 @@ EXE_MM_SOURCES = \
 #
 LIBS = \
 ${ev_LIBS} \
--lpthread \
--ldl \
 
 #
 # Executable depends

@@ -16,14 +16,14 @@
 #   File: Makefile
 #
 # Author: $author$
-#   Date: 11/13/2014
+#   Date: 12/10/2014
 #
-# MacOSX Gcc Makefile for evelation evcp Executable
+# Linux Gcc Makefile for evelation evcp Executable
 ########################################################################
 PKG = ../../../../../..
 
 MAK = projects/Makefile/Gcc
-PRJ = projects/macosx/Makefile/Gcc
+PRJ = projects/linux/Makefile/Gcc
 SRC = src
 
 include $(PKG)/$(MAK)/Makedefines

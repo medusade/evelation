@@ -16,19 +16,19 @@
 #   File: ev.pri
 #
 # Author: $author$
-#   Date: 10/30/2014
+#   Date: 12/10/2014
 ########################################################################
 
 QMAKE_CXXFLAGS += -std=c++11
 
 ########################################################################
 # talas
-TALAS_BLD = ../$${TALAS_PKG}/build/macosx/QtCreator/Debug
+TALAS_BLD = ../$${TALAS_PKG}/build/linux/QtCreator/Debug
 TALAS_LIB = $${TALAS_BLD}/lib
 
 ########################################################################
 # xos
-XOS_BLD = ../$${XOS_PKG}/build/macosx/QtCreator/Debug
+XOS_BLD = ../$${XOS_PKG}/build/linux/QtCreator/Debug
 XOS_LIB = $${XOS_BLD}/lib
 
 ########################################################################
@@ -40,3 +40,5 @@ ev_LIBS += \
 -lxosnadir \
 -lpthread \
 -ldl \
+-lrt \
+
