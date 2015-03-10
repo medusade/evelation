@@ -31,35 +31,37 @@ $${ev_DEFINES} \
 
 ########################################################################
 HEADERS += \
-$${EV_SRC}/ev/base/base.hpp \
-$${EV_SRC}/ev/crypto/base.hpp \
-$${EV_SRC}/ev/fs/entry.hpp \
-$${EV_SRC}/ev/fs/path/match/read/events.hpp \
-$${EV_SRC}/ev/fs/path/match/reader.hpp \
-$${EV_SRC}/ev/fs/path/matcher.hpp \
-$${EV_SRC}/ev/fs/path/matchers.hpp \
-$${EV_SRC}/ev/fs/path/separate/events.hpp \
-$${EV_SRC}/ev/fs/path/separator.hpp \
-$${EV_SRC}/ev/fs/path/parts.hpp \
-$${EV_SRC}/ev/fs/path/directory/name.hpp \
-$${EV_SRC}/ev/os/unix/fs/directory/path.hpp \
-$${EV_SRC}/ev/os/unix/fs/directory/entry.hpp \
-$${EV_SRC}/ev/os/unix/fs/entry.hpp \
-$${EV_SRC}/ev/fs/directory/path.hpp \
-$${EV_SRC}/ev/fs/directory/entry.hpp \
 $${EV_SRC}/ev/app/console/ls/main.hpp \
 
+#$${EV_SRC}/ev/base/base.hpp \
+#$${EV_SRC}/ev/crypto/base.hpp \
+#$${EV_SRC}/ev/fs/entry.hpp \
+#$${EV_SRC}/ev/fs/path/match/read/events.hpp \
+#$${EV_SRC}/ev/fs/path/match/reader.hpp \
+#$${EV_SRC}/ev/fs/path/matcher.hpp \
+#$${EV_SRC}/ev/fs/path/matchers.hpp \
+#$${EV_SRC}/ev/fs/path/separate/events.hpp \
+#$${EV_SRC}/ev/fs/path/separator.hpp \
+#$${EV_SRC}/ev/fs/path/parts.hpp \
+#$${EV_SRC}/ev/fs/path/directory/name.hpp \
+#$${EV_SRC}/ev/os/unix/fs/directory/path.hpp \
+#$${EV_SRC}/ev/os/unix/fs/directory/entry.hpp \
+#$${EV_SRC}/ev/os/unix/fs/entry.hpp \
+#$${EV_SRC}/ev/fs/directory/path.hpp \
+#$${EV_SRC}/ev/fs/directory/entry.hpp \
+
 SOURCES += \
-$${EV_SRC}/ev/fs/path/matcher.cpp \
-$${EV_SRC}/ev/fs/path/match/reader.cpp \
-$${EV_SRC}/ev/fs/path/match/read/events.cpp \
-$${EV_SRC}/ev/fs/path/separator.cpp \
-$${EV_SRC}/ev/fs/path/parts.cpp \
-$${EV_SRC}/ev/fs/path/directory/name.cpp \
-$${EV_SRC}/ev/os/unix/fs/directory/path.cpp \
-$${EV_SRC}/ev/os/unix/fs/directory/entry.cpp \
 $${EV_SRC}/ev/app/console/ls/main.cpp \
 $${EV_SRC}/ev/console/main_main.cpp \
+
+#$${EV_SRC}/ev/fs/path/matcher.cpp \
+#$${EV_SRC}/ev/fs/path/match/reader.cpp \
+#$${EV_SRC}/ev/fs/path/match/read/events.cpp \
+#$${EV_SRC}/ev/fs/path/separator.cpp \
+#$${EV_SRC}/ev/fs/path/parts.cpp \
+#$${EV_SRC}/ev/fs/path/directory/name.cpp \
+#$${EV_SRC}/ev/os/unix/fs/directory/path.cpp \
+#$${EV_SRC}/ev/os/unix/fs/directory/entry.cpp \
 
 LIBS += \
 $${ev_LIBS} \

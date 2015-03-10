@@ -33,17 +33,19 @@ $${evcp_DEFINES} \
 ########################################################################
 HEADERS += \
 $${evcp_HEADERS} \
-$${EV_SRC}/ev/os/macosx/fs/directory/path.hpp \
-$${EV_SRC}/ev/os/macosx/fs/directory/entry.hpp \
-$${EV_SRC}/ev/os/macosx/fs/entry.hpp \
-$${EV_SRC}/ev/os/unix/fs/directory/path.hpp \
-$${EV_SRC}/ev/os/unix/fs/directory/entry.hpp \
-$${EV_SRC}/ev/os/unix/fs/entry.hpp \
+
+#$${EV_SRC}/ev/os/macosx/fs/directory/path.hpp \
+#$${EV_SRC}/ev/os/macosx/fs/directory/entry.hpp \
+#$${EV_SRC}/ev/os/macosx/fs/entry.hpp \
+#$${EV_SRC}/ev/os/unix/fs/directory/path.hpp \
+#$${EV_SRC}/ev/os/unix/fs/directory/entry.hpp \
+#$${EV_SRC}/ev/os/unix/fs/entry.hpp \
 
 SOURCES += \
 $${evcp_SOURCES} \
-$${EV_SRC}/ev/os/macosx/fs/directory/path.cpp \
-$${EV_SRC}/ev/os/macosx/fs/directory/entry.cpp \
+
+#$${EV_SRC}/ev/os/macosx/fs/directory/path.cpp \
+#$${EV_SRC}/ev/os/macosx/fs/directory/entry.cpp \
 
 LIBS += \
 $${evcp_LIBS} \

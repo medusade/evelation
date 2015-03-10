@@ -63,3 +63,5 @@ ev_HEADERS += \
 ev_SOURCES += \
 
 ev_LIBS += \
+-L$${EV_LIB}/libevelation \
+-levelation \
