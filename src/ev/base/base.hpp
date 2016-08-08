@@ -35,6 +35,12 @@
 #include "xos/io/file/attached.hpp"
 #include "xos/io/logger.hpp"
 
+#if defined(CPP_11)
+#if !defined(EV_USE_CPP_11)
+#define EV_USE_CPP_11
+#endif // !defined(EV_USE_CPP_11)
+#endif // defined(CPP_11)
+
 #define EV_LOG_ANY XOS_LOG_ANY
 #define EV_LOG_FATAL XOS_LOG_FATAL
 #define EV_LOG_ERROR XOS_LOG_ERROR
@@ -97,6 +103,7 @@ protected:
 ///////////////////////////////////////////////////////////////////////
 typedef xos::base::attacher_implements attacher_implements;
 
+#if defined(EV_USE_CPP_11)
 template
 <typename TAttached = void*,
  typename TUnattached = int, TUnattached VUnattached = 0,
@@ -104,12 +111,16 @@ template
 
 using attachert = typename xos::base::attachert
 <TAttached, TUnattached, VUnattached, TImplements>;
+#else // defined(EV_USE_CPP_11)
+#define attachert xos::base::attachert
+#endif // defined(EV_USE_CPP_11)
 
 ///////////////////////////////////////////////////////////////////////
 /// attached
 ///////////////////////////////////////////////////////////////////////
 typedef xos::base::attached_extends attached_extends;
 
+#if defined(EV_USE_CPP_11)
 template
 <typename TAttached = void*,
  typename TUnattached = int, TUnattached VUnattached = 0,
@@ -119,6 +130,9 @@ template
 
 using attachedt = typename xos::base::attachedt
 <TAttached, TUnattached, VUnattached, TImplements, TExtends>;
+#else // defined(EV_USE_CPP_11)
+#define attachedt xos::base::attachedt
+#endif // defined(EV_USE_CPP_11)
 
 ///////////////////////////////////////////////////////////////////////
 /// opener
@@ -129,9 +143,13 @@ const opener_exception failed_to_close = xos::base::failed_to_close;
 
 typedef xos::base::opener_implements opener_implements;
 
+#if defined(EV_USE_CPP_11)
 template<class TImplements = opener_implements>
 
 using openert = typename xos::base::openert<TImplements>;
+#else // defined(EV_USE_CPP_11)
+#define openert xos::base::openert
+#endif // defined(EV_USE_CPP_11)
 
 typedef xos::base::opener opener;
 
@@ -141,6 +159,7 @@ typedef xos::base::opener opener;
 typedef opener_implements opened_implements;
 typedef xos::base::opened_extends opened_extends;
 
+#if defined(EV_USE_CPP_11)
 template
 <typename TAttached = void*,
  typename TUnattached = int, TUnattached VUnattached = 0,
@@ -151,20 +170,27 @@ template
 
 using openedt = typename xos::base::openedt
 <TAttached, TUnattached, VUnattached, TImplements, TExtends>;
+#else // defined(EV_USE_CPP_11)
+#define openedt xos::base::openedt
+#endif // defined(EV_USE_CPP_11)
 
 typedef xos::base::opened opened;
 
 ///////////////////////////////////////////////////////////////////////
 /// string
 ///////////////////////////////////////////////////////////////////////
-typedef xos::base::string_implement string_implements;
+typedef xos::base::string_implements string_implements;
 
+#if defined(EV_USE_CPP_11)
 template
 <typename TChar = char, typename TEnd = TChar, TEnd VEnd = 0,
  class TExtends = std::basic_string<TChar>, class TImplements = string_implements>
 
 using stringt = typename xos::base::stringt
 <TChar, TEnd, VEnd, TExtends, TImplements>;
+#else // defined(EV_USE_CPP_11)
+#define stringt xos::base::stringt
+#endif // defined(EV_USE_CPP_11)
 
 typedef xos::base::string string_t;
 typedef xos::base::tstring tstring_t;
