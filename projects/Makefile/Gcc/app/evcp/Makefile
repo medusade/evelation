@@ -21,6 +21,11 @@
 # Gcc Makefile for evelation evcp Executable
 ########################################################################
 
+#
+# target
+#
+evcp_EXETARGET = evecp
+
 ########################################################################
 # ev
 evcp_CPP_SOURCES += \

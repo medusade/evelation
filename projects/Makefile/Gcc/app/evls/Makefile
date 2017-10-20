@@ -21,6 +21,11 @@
 # Common Gcc Makefile for evelation evls Executable
 ########################################################################
 
+#
+# target
+#
+evls_EXETARGET = evels
+
 ########################################################################
 # ev
 evls_CPP_SOURCES += \

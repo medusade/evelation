@@ -34,7 +34,7 @@ include $(PKG)/$(MAK)/app/evcp/Makefile
 #
 # target
 #
-EXETARGET = evcp
+EXETARGET = ${evcp_EXETARGET}
 
 #
 # user defines

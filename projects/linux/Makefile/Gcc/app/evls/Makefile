@@ -34,7 +34,7 @@ include $(PKG)/$(MAK)/app/evls/Makefile
 #
 # target
 #
-EXETARGET = evls
+EXETARGET = ${evls_EXETARGET}
 
 #
 # user defines
